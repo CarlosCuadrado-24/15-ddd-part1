@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.dune'
+version = '1'
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+}
+

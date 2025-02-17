@@ -1,0 +1,9 @@
+rootProject.name = 'dune'
+
+include ':shared:domain'
+project(':shared:domain').projectDir = file('./src/shared/src/domain')
+
+include ':battleManager:domain'
+project(':battleManager:domain').projectDir = file('./src/battleManager/src/domain')
+
+
