@@ -16,8 +16,10 @@ import com.dune.battleManager.domain.player.values.PlayerId;
 import com.dune.battleManager.domain.player.values.Resource;
 import com.dune.battleManager.domain.player.values.VictoryPoints;
 import com.dune.shared.domain.generic.AggregateRoot;
+import com.dune.shared.domain.generic.DomainEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends AggregateRoot<PlayerId> {
     private Name name;
@@ -30,14 +32,19 @@ public class Player extends AggregateRoot<PlayerId> {
     private Leader leader;
     private Garrison garrison;
 
+    //region constructores
     public Player() {
         super(new PlayerId());
+        subscribe(new PlayerHandler(this));
     }
 
     private Player(PlayerId identity) {
         super(identity);
+        subscribe(new PlayerHandler(this));
     }
+    //endregion
 
+    //region getters and setters
     public Name getName() {
         return name;
     }
@@ -109,25 +116,35 @@ public class Player extends AggregateRoot<PlayerId> {
     public void setGarrison(Garrison garrison) {
         this.garrison = garrison;
     }
+    //endregion
 
-    public void deployTroopsToBattle(String combatIntrigueCardName, Integer combatIntrigueCardStack, String permanentAbility, Integer permanentAbilityStack){
-        apply(new TroopsDeployedToBattle(combatIntrigueCardName,combatIntrigueCardStack,permanentAbility,permanentAbilityStack));
+    //region eventos de dominio
+    public void deployTroopsToBattle(Integer round){
+        apply(new TroopsDeployedToBattle(round));
     }
 
-    public void calculateBattleStrength(Integer battleStrength, Integer battleReadyTroops, String effectIntrigueCard, Integer stackIntrigueCard, String effectPermanentAbilityLeader, Integer stackPermanentAbilityLeader){
-        apply(new BattleStrengthCalculated(battleStrength,battleReadyTroops, effectIntrigueCard,stackIntrigueCard,effectPermanentAbilityLeader,stackPermanentAbilityLeader));
+    public void calculateBattleStrength(Integer round){
+        apply(new BattleStrengthCalculated(round));
     }
 
-    public void deployAgent(){
+    public void deployAgentToBattle(){
         apply(new AgentDeployed());
     }
 
-    public void useLeaderHiddenAbility(String combatIntrigueCard){
-        apply(new LeaderHiddenAbilityUsed(combatIntrigueCard));
+    public void useLeaderHiddenAbility(Integer round){
+        apply(new LeaderHiddenAbilityUsed(round));
     }
 
-    public void receiveRewards(Integer victoryPoints, Integer cantResource, String typeResource, Integer troops){
-        apply(new RewardsReceived(victoryPoints,cantResource,typeResource,troops));
+    public void receiveRewards(Integer victoryPoints, Integer cantResource, String typeResource,String descriptionResource, Integer troops){
+        apply(new RewardsReceived(victoryPoints,cantResource,typeResource,descriptionResource,troops));
+    }
+    //endregion
+
+    public static Player from(final String identity, final List<DomainEvent> events) {
+        Player player = new Player(PlayerId.of(identity));
+
+        events.forEach(player::apply);
+        return player;
     }
 
 

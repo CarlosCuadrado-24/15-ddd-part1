@@ -7,13 +7,15 @@ public class RewardsReceived extends DomainEvent {
     private final Integer victoryPoints;
     private final Integer cantResource;
     private final String typeResource;
+    private final String descriptionResource;
     private final Integer troops;
 
-    public RewardsReceived(Integer victoryPoints, Integer cantResource, String typeResource, Integer troops) {
+    public RewardsReceived(Integer victoryPoints, Integer cantResource, String typeResource, String descriptionResource, Integer troops) {
         super(EventsEnum.REWARDS_RECEIVED.name());
         this.victoryPoints = victoryPoints;
         this.cantResource = cantResource;
         this.typeResource = typeResource;
+        this.descriptionResource = descriptionResource;
         this.troops = troops;
     }
 
@@ -31,5 +33,9 @@ public class RewardsReceived extends DomainEvent {
 
     public Integer getCantResource() {
         return cantResource;
+    }
+
+    public String getDescriptionResource() {
+        return descriptionResource;
     }
 }

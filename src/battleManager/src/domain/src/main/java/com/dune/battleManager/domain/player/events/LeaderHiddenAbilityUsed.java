@@ -4,15 +4,14 @@ import com.dune.shared.domain.generic.DomainEvent;
 
 public class LeaderHiddenAbilityUsed extends DomainEvent {
 
-    private final String combatIntrigueCard;
+    private final Integer Round;
 
-    public LeaderHiddenAbilityUsed(String combatIntrigueCard) {
+    public LeaderHiddenAbilityUsed(Integer round){
         super(EventsEnum.LEADER_HIDDEN_ABILITY_USED.name());
-        this.combatIntrigueCard = combatIntrigueCard;
+        Round = round;
     }
 
-    public String getCombatIntrigueCard() {
-        return combatIntrigueCard;
+    public Integer getRound() {
+        return Round;
     }
-
 }

@@ -40,7 +40,7 @@ public class Leader extends Entity<LeaderId> {
 
     public void unblockHiddenAbility(String combatIntrigueCard){
         if(this.hiddenAbility.getCardNameToUnlock().equals(combatIntrigueCard)){
-            this.setBlockHiddenAbility(BlockHiddenAbility.of(true));
+            this.setBlockHiddenAbility(BlockHiddenAbility.of(false));
         }
     }
 

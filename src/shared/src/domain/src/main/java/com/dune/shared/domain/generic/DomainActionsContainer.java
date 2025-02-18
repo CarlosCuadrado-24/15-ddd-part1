@@ -7,8 +7,8 @@ import java.util.function.Consumer;
 public abstract class DomainActionsContainer {
     protected Set<Consumer<? super DomainEvent>> actions = new HashSet<>();
 
-    protected void add(final Consumer<? super DomainEvent> consumer){
-        actions.add(consumer);
+    protected void add(final Consumer<? extends DomainEvent> consumer){
+        actions.add((Consumer<? super DomainEvent>) consumer);
     }
 
 }

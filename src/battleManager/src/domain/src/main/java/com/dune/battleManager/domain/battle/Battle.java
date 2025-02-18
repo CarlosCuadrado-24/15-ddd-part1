@@ -3,43 +3,47 @@ package com.dune.battleManager.domain.battle;
 import com.dune.battleManager.domain.battle.entities.ConflictCard;
 import com.dune.battleManager.domain.battle.entities.Faction;
 import com.dune.battleManager.domain.battle.entities.Territory;
-import com.dune.battleManager.domain.battle.events.ConflictCardRevealed;
 import com.dune.battleManager.domain.battle.events.ConflictWinnerDetermined;
 import com.dune.battleManager.domain.battle.events.NewRoundStarted;
 import com.dune.battleManager.domain.battle.events.ParticipantsConfirmed;
-import com.dune.battleManager.domain.battle.events.RewardsGranted;
+import com.dune.battleManager.domain.battle.events.PlayersLoaded;
 import com.dune.battleManager.domain.battle.events.TerritoryBonusApplied;
 import com.dune.battleManager.domain.battle.events.TerritoryCurseApplied;
 import com.dune.battleManager.domain.battle.values.BattleId;
 import com.dune.battleManager.domain.battle.values.Round;
 import com.dune.battleManager.domain.battle.values.Rule;
-import com.dune.battleManager.domain.player.events.RewardsReceived;
+import com.dune.battleManager.domain.player.Player;
 import com.dune.shared.domain.generic.AggregateRoot;
+import com.dune.shared.domain.generic.DomainEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Battle extends AggregateRoot<BattleId> {
-    private ArrayList<Integer> jugadores;
+    private ArrayList<Player> players;
     private ArrayList<Rule> rules;
     private Round round;
     private Territory territory;
     private ConflictCard conflictCard;
     private Faction faction;
+    private Player winner;
 
     public Battle() {
         super(new BattleId());
+        subscribe(new BattleHander(this));
     }
 
     public Battle(BattleId identity) {
         super(identity);
+        subscribe(new BattleHander(this));
     }
 
-    public ArrayList<Integer> getJugadores() {
-        return jugadores;
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
-    public void setJugadores(ArrayList<Integer> jugadores) {
-        this.jugadores = jugadores;
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
     }
 
     public ArrayList<Rule> getRules() {
@@ -82,32 +86,47 @@ public class Battle extends AggregateRoot<BattleId> {
         this.faction = faction;
     }
 
-    public void RevealConflictCard(){
-        apply(new ConflictCardRevealed());
+    public Player getWinner() {
+        return winner;
     }
 
-    public void DetermineConflictWinner(){
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
+    public void determineConflictWinner(){
         apply(new ConflictWinnerDetermined());
     }
 
-    public void StartNewRound(){
+    public void startNewRound(){
         apply(new NewRoundStarted());
     }
 
-    public void ConfirmParticipants(){
+    public void confirmParticipants(){
         apply(new ParticipantsConfirmed());
     }
 
-    public void GrantRewards(String name, Integer victoryPoints, Integer troops, Integer resources){
-        apply(new RewardsGranted(name,victoryPoints,troops,resources));
+    public void grantRewards(){
+        apply(new RewardsGranted());
     }
 
-    public void ApplyTerritoryBonus(){
+    public void applyTerritoryBonus(){
         apply(new TerritoryBonusApplied());
     }
 
-    public void ApplyTerritoryCurse(){
+    public void applyTerritoryCurse(){
         apply(new TerritoryCurseApplied());
+    }
+
+    public void loadPlayers(ArrayList<Player> players){
+        apply(new PlayersLoaded(players));
+    }
+
+    public static Battle from(final String identity, final List<DomainEvent> events) {
+        Battle battle = new Battle(BattleId.of(identity));
+
+        events.forEach(battle::apply);
+        return battle;
     }
 
 
