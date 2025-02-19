@@ -30,11 +30,17 @@ public class Battle extends AggregateRoot<BattleId> {
 
     public Battle() {
         super(new BattleId());
+        this.players = new ArrayList<>();
+        this.rules = new ArrayList<>();
+        this.round = Round.of(1);
         subscribe(new BattleHander(this));
     }
 
     public Battle(BattleId identity) {
         super(identity);
+        this.players = new ArrayList<>();
+        this.rules = new ArrayList<>();
+        this.round = Round.of(1);
         subscribe(new BattleHander(this));
     }
 
@@ -106,10 +112,6 @@ public class Battle extends AggregateRoot<BattleId> {
         apply(new ParticipantsConfirmed());
     }
 
-    public void grantRewards(){
-        apply(new RewardsGranted());
-    }
-
     public void applyTerritoryBonus(){
         apply(new TerritoryBonusApplied());
     }
@@ -128,6 +130,7 @@ public class Battle extends AggregateRoot<BattleId> {
         events.forEach(battle::apply);
         return battle;
     }
+
 
 
 }

@@ -50,17 +50,21 @@ public class BattleHander extends DomainActionsContainer {
         };
     }
 
-    public Consumer<? extends DomainEvent> applyTerritoryBonus(Battle battle){
-        return (TerritoryBonusApplied event) ->{
+    public Consumer<? extends DomainEvent> applyTerritoryBonus(Battle battle) {
+        return (TerritoryBonusApplied event) -> {
             for (Player player : battle.getPlayers()) {
                 Integer battleStrength = player.getBattleStrength().getValue();
-                for(int i=0; i<battle.getRules().size(); i++){
-                    battleStrength = battle.getTerritory().increaseBattleStrength(player.getBattleStrength().getValue(),battle.getRules().get(i).getAllowed(),player.getResources().get(0).getType());
+                for (int i = 0; i < battle.getRules().size(); i++) {
+                    battleStrength = battle.getTerritory()
+                            .increaseBattleStrength(battleStrength,
+                                    battle.getRules().get(i).getAllowed(),
+                                    player.getResources().get(0).getType());
                 }
                 player.setBattleStrength(BattleStrength.of(battleStrength));
             }
         };
     }
+
 
     public Consumer<? extends DomainEvent> applyTerritoryCurse(Battle battle){
         return (TerritoryCurseApplied event) ->{

@@ -62,11 +62,11 @@ public class PlayerHandler extends DomainActionsContainer {
 
     public Consumer<? extends DomainEvent> receiveRewards(Player player){
         return (RewardsReceived event) ->{
-            player.setVictoryPoints(VictoryPoints.of(event.getVictoryPoints()));
+            player.setVictoryPoints(VictoryPoints.of(event.getVictoryPoints()+player.getVictoryPoints().getValue()));
             for(int i=0; i<event.getCantResource(); i++){
                 player.getResources().add(Resource.of(event.getTypeResource(),event.getDescriptionResource()));
             }
-            player.getGarrison().setTotalTroops(TotalTroops.of(event.getTroops()));
+            player.getGarrison().setTotalTroops(TotalTroops.of(event.getTroops()+player.getGarrison().getTotalTroops().getValue()));
         };
     }
 

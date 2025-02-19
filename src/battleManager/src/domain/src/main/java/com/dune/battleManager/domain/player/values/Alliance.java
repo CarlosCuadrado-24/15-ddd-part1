@@ -17,7 +17,7 @@ public class Alliance implements IValueObject {
 
     @Override
     public void validate() {
-        if(!this.value.matches("^[a-zA-Z0-9]*$")){
+        if(!this.value.matches("^[a-zA-Z0-9]+$")){
             throw new IllegalArgumentException("The object can't have special characters");
         }
     }

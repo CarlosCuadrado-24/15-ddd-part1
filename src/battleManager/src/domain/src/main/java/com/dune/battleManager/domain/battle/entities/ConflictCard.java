@@ -27,15 +27,6 @@ public class ConflictCard extends Entity<ConflictCardId>{
         this.reward = reward;
     }
 
-    public String Details(){
-        return "Name:"+this.name.getValue()+"\n"+
-                "Intensity level:"+this.name.getValue()+"\n"+
-                "------------------------------------------"+"\n"+
-                "Reward"+"\n"+
-                "Resources:"+this.reward.getResources()+"\n"+
-                "Victory Points:"+this.reward.getVictoryPoints()+"\n"+
-                "Troops:"+this.reward.getTroops();
-    }
 
     public Name getName() {
         return name;

@@ -35,6 +35,8 @@ public class Player extends AggregateRoot<PlayerId> {
     //region constructores
     public Player() {
         super(new PlayerId());
+        this.resources = new ArrayList<>();
+        this.combatIntrigueCard = new ArrayList<>();
         subscribe(new PlayerHandler(this));
     }
 
@@ -65,16 +67,8 @@ public class Player extends AggregateRoot<PlayerId> {
         return resources;
     }
 
-    public void setResources(ArrayList<Resource> resources) {
-        this.resources = resources;
-    }
-
     public ArrayList<CombatIntrigueCard> getCombatIntrigueCard() {
         return combatIntrigueCard;
-    }
-
-    public void setCombatIntrigueCard(ArrayList<CombatIntrigueCard> combatIntrigueCard) {
-        this.combatIntrigueCard = combatIntrigueCard;
     }
 
     public DeployedAgent getDeployedAgent() {
