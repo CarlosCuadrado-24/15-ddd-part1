@@ -13,6 +13,19 @@ public class InitializeBattleResponse {
         this.territoryGame = territoryGame;
     }
 
+
+    public ArrayList<PlayerGame> getPlayers() {
+        return players;
+    }
+
+    public ConflictCardGame getConflictCard() {
+        return conflictCard;
+    }
+
+    public TerritoryGame getTerritoryGame() {
+        return territoryGame;
+    }
+
     public static class PlayerGame{
         private final String name;
         private final Integer victoryPoints;
@@ -110,6 +123,5 @@ public class InitializeBattleResponse {
             return bonusStack;
         }
     }
-
 
 }

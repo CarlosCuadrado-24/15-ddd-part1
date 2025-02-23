@@ -31,7 +31,7 @@ public class PreparePlayerToBattleUseCase implements ICommandUseCase <PreparePla
                     player.getUncommittedEvents().forEach(repository::save);
                     player.markEventsAsCommitted();
 
-                    
+
                     return Mono.just(new PreparePlayerToBattleResponse(
                             player.getDeployedAgent().getValue(),
                             player.getGarrison().getBattleReadyTroops().getValue(),

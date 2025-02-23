@@ -69,10 +69,10 @@ public class BattleHander extends DomainActionsContainer {
 
             battle.setRules(rules);
 
-            battle.setFaction(new Faction(Name.of("Emperator"), Description.of("Faction Emperator")));
+            battle.setFaction(new Faction(Name.of("Emperator"), Description.of("Emperator")));
 
             Name territoryName = Name.of("Arrakis");
-            Banner banner = Banner.of("red Arrakis Banner");
+            Banner banner = Banner.of("Banner");
             Bonus territoryBonus = Bonus.of("ArrakisBonus","Battle Strength",2);
             Curse territoryCurse = Curse.of("Sandstorm","decrease Resources",1);
 

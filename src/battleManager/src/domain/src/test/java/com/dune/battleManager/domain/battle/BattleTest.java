@@ -219,6 +219,13 @@ class BattleTest {
         assertEquals(0,battle.getPlayers().get(1).getResources().size());
     }
 
+    @Test
+    void initDataTest(){
+        Battle battle2 = new Battle();
+//        battle2.initGame();
+        assertEquals("Arrakis", battle2.getTerritory().getName().getValue());
+    }
+
 
 
 

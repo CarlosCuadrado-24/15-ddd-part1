@@ -22,8 +22,9 @@ public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattl
     public Mono<InitializeBattleResponse> execute(InitializeBattleRequest request) {
         Battle battle = new Battle();
         battle.loadPlayers(request.getPlayers());
+        System.out.println("Jugadores cargados en battle: " + battle.getPlayers().size());
         battle.confirmParticipants();
-
+        System.out.println("Jugadores cargados en battle: " + battle.getPlayers().size());
         List<InitializeBattleResponse.PlayerGame> playerGames = battle.getPlayers().stream()
                 .map(player -> new InitializeBattleResponse.PlayerGame(
                         player.getName().getValue(),
@@ -33,14 +34,6 @@ public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattl
                 ))
                 .collect(Collectors.toList());
 
-        ConflictCard conflictCard = battle.getConflictCard();
-        InitializeBattleResponse.ConflictCardGame conflictCardGame = new InitializeBattleResponse.ConflictCardGame(
-                conflictCard.getName().getValue(),
-                conflictCard.getReward().getVictoryPoints(),
-                conflictCard.getReward().getTroops(),
-                conflictCard.getReward().getResources()
-        );
-
         Territory territory = battle.getTerritory();
         InitializeBattleResponse.TerritoryGame territoryGame = new InitializeBattleResponse.TerritoryGame(
                 territory.getName().getValue(),
@@ -49,6 +42,16 @@ public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattl
                 territory.getBonus().getEffect(),
                 territory.getBonus().getStack()
         );
+
+        ConflictCard conflictCard = battle.getConflictCard();
+        InitializeBattleResponse.ConflictCardGame conflictCardGame = new InitializeBattleResponse.ConflictCardGame(
+                conflictCard.getName().getValue(),
+                conflictCard.getReward().getVictoryPoints(),
+                conflictCard.getReward().getTroops(),
+                conflictCard.getReward().getResources()
+        );
+
+
 
         battle.getUncommittedEvents().forEach(repository::save);
         battle.markEventsAsCommitted();

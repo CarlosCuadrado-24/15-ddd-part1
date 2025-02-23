@@ -34,8 +34,8 @@ public class Battle extends AggregateRoot<BattleId> {
         this.players = new ArrayList<>();
         this.rules = new ArrayList<>();
         this.round = Round.of(1);
-        apply(new InitializedDateBattle());
         subscribe(new BattleHander(this));
+        apply(new InitializedDateBattle());
     }
 
     public Battle(BattleId identity) {
@@ -127,7 +127,7 @@ public class Battle extends AggregateRoot<BattleId> {
     }
 
 //    public void initGame(){
-//
+//        apply(new InitializedDateBattle());
 //    }
 
     public static Battle from(final String identity, final List<DomainEvent> events) {
