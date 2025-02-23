@@ -3,7 +3,13 @@ rootProject.name = 'dune'
 include ':shared:domain'
 project(':shared:domain').projectDir = file('./src/shared/src/domain')
 
+include('shared:application')
+project(':shared:application').projectDir = file('./src/shared/src/application')
+
 include ':battleManager:domain'
 project(':battleManager:domain').projectDir = file('./src/battleManager/src/domain')
+
+include ':battleManager:application'
+project(':battleManager:application').projectDir = file('./src/battleManager/src/application')
 
 

@@ -27,7 +27,6 @@ public class ConflictCard extends Entity<ConflictCardId>{
         this.reward = reward;
     }
 
-
     public Name getName() {
         return name;
     }

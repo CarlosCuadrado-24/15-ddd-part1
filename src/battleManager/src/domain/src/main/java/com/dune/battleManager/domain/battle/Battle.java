@@ -4,6 +4,7 @@ import com.dune.battleManager.domain.battle.entities.ConflictCard;
 import com.dune.battleManager.domain.battle.entities.Faction;
 import com.dune.battleManager.domain.battle.entities.Territory;
 import com.dune.battleManager.domain.battle.events.ConflictWinnerDetermined;
+import com.dune.battleManager.domain.battle.events.InitializedDateBattle;
 import com.dune.battleManager.domain.battle.events.NewRoundStarted;
 import com.dune.battleManager.domain.battle.events.ParticipantsConfirmed;
 import com.dune.battleManager.domain.battle.events.PlayersLoaded;
@@ -33,6 +34,7 @@ public class Battle extends AggregateRoot<BattleId> {
         this.players = new ArrayList<>();
         this.rules = new ArrayList<>();
         this.round = Round.of(1);
+        apply(new InitializedDateBattle());
         subscribe(new BattleHander(this));
     }
 
@@ -123,6 +125,10 @@ public class Battle extends AggregateRoot<BattleId> {
     public void loadPlayers(ArrayList<Player> players){
         apply(new PlayersLoaded(players));
     }
+
+//    public void initGame(){
+//
+//    }
 
     public static Battle from(final String identity, final List<DomainEvent> events) {
         Battle battle = new Battle(BattleId.of(identity));

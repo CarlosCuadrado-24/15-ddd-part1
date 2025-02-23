@@ -76,7 +76,4 @@ public class Territory extends Entity<TerritoryId> {
         this.curse = curse;
     }
 
-
-
-
 }

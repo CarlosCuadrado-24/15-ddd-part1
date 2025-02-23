@@ -1,18 +1,30 @@
 package com.dune.battleManager.domain.battle;
 
+import com.dune.battleManager.domain.battle.entities.ConflictCard;
+import com.dune.battleManager.domain.battle.entities.Faction;
+import com.dune.battleManager.domain.battle.entities.Territory;
 import com.dune.battleManager.domain.battle.events.ConflictWinnerDetermined;
+import com.dune.battleManager.domain.battle.events.InitializedDateBattle;
 import com.dune.battleManager.domain.battle.events.NewRoundStarted;
 import com.dune.battleManager.domain.battle.events.ParticipantsConfirmed;
 import com.dune.battleManager.domain.battle.events.PlayersLoaded;
 import com.dune.battleManager.domain.battle.events.TerritoryBonusApplied;
 import com.dune.battleManager.domain.battle.events.TerritoryCurseApplied;
+import com.dune.battleManager.domain.battle.values.Banner;
+import com.dune.battleManager.domain.battle.values.Bonus;
+import com.dune.battleManager.domain.battle.values.Curse;
+import com.dune.battleManager.domain.battle.values.Description;
+import com.dune.battleManager.domain.battle.values.IntensityLevel;
+import com.dune.battleManager.domain.battle.values.Name;
+import com.dune.battleManager.domain.battle.values.Reward;
 import com.dune.battleManager.domain.battle.values.Round;
+import com.dune.battleManager.domain.battle.values.Rule;
 import com.dune.battleManager.domain.player.Player;
 import com.dune.battleManager.domain.player.values.BattleStrength;
 import com.dune.shared.domain.generic.DomainActionsContainer;
 import com.dune.shared.domain.generic.DomainEvent;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class BattleHander extends DomainActionsContainer {
@@ -24,12 +36,66 @@ public class BattleHander extends DomainActionsContainer {
         add(applyTerritoryBonus(battle));
         add(applyTerritoryCurse(battle));
         add(determineConflictWinner(battle));
+        add(initDataBattle(battle));
     }
 
 
     public Consumer<? extends DomainEvent> startNewRound(Battle battle){
         return (NewRoundStarted event) ->{
             battle.setRound(Round.of(battle.getRound().getValue()+1));
+        };
+    }
+
+    public Consumer<? extends DomainEvent> initDataBattle(Battle battle){
+        return (InitializedDateBattle event) ->{
+            ArrayList<Rule> rules = new ArrayList<>();
+            rules.add(Rule.of(
+                    "ResourceLimit",
+                    "water",
+                    "Steal",
+                    "Players can trade resources but cannot steal from others.",
+                    0,
+                    "Water"
+            ));
+
+            rules.add(Rule.of(
+                    "TroopDeployment",
+                    "Deploy",
+                    "Retreat",
+                    "Players can deploy troops to the battlefield but cannot retreat once deployed.",
+                    5,
+                    "Spice"
+            ));
+
+            battle.setRules(rules);
+
+            battle.setFaction(new Faction(Name.of("Emperator"), Description.of("Faction Emperator")));
+
+            Name territoryName = Name.of("Arrakis");
+            Banner banner = Banner.of("red Arrakis Banner");
+            Bonus territoryBonus = Bonus.of("ArrakisBonus","Battle Strength",2);
+            Curse territoryCurse = Curse.of("Sandstorm","decrease Resources",1);
+
+            Territory territory = new Territory(
+                    territoryName,
+                    banner,
+                    territoryBonus,
+                    territoryCurse
+            );
+
+            battle.setTerritory(territory);
+
+            Name conflictCardName = Name.of("FirstConflict");
+            IntensityLevel intensityLevel = IntensityLevel.of(3);
+            Reward reward = Reward.of(1, 2, 3);
+            ConflictCard conflictCard = new ConflictCard(
+                    conflictCardName,
+                    intensityLevel,
+                    reward
+            );
+
+            battle.setConflictCard(conflictCard);
+
         };
     }
 
