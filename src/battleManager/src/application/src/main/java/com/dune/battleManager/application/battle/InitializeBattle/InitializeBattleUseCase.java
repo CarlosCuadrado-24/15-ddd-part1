@@ -22,14 +22,13 @@ public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattl
     public Mono<InitializeBattleResponse> execute(InitializeBattleRequest request) {
         Battle battle = new Battle();
         battle.loadPlayers(request.getPlayers());
-        System.out.println("Jugadores cargados en battle: " + battle.getPlayers().size());
         battle.confirmParticipants();
-        System.out.println("Jugadores cargados en battle: " + battle.getPlayers().size());
+
         List<InitializeBattleResponse.PlayerGame> playerGames = battle.getPlayers().stream()
                 .map(player -> new InitializeBattleResponse.PlayerGame(
                         player.getName().getValue(),
                         player.getVictoryPoints().getValue(),
-                        player.getGarrison().getTotalTroops().getValue(),
+                        player.getGarrison().getBattleReadyTroops().getValue(),
                         player.getResources().size()
                 ))
                 .collect(Collectors.toList());

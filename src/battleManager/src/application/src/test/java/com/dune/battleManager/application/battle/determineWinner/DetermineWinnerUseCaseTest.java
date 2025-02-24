@@ -48,7 +48,7 @@ class DetermineWinnerUseCaseTest {
         player.setVictoryPoints(VictoryPoints.of(1));
         player.setBattleStrength(BattleStrength.of(0));
         player.setAlliance(Alliance.of("Emperador"));
-        player.setDeployedAgent(DeployedAgent.of(false));
+        player.setDeployedAgent(DeployedAgent.of(true));
         player.getResources().add(Resource.of("water","water"));
         player.getCombatIntrigueCard().add(CombatIntrigueCard.of("Troops To Battle","troops",2));
 
@@ -79,8 +79,19 @@ class DetermineWinnerUseCaseTest {
                 .create(useCase.execute(request))
                 .assertNext(response -> {
                     assertNotNull(response);
-                    assertFalse(request.getPlayers().isEmpty(), "La lista de jugadores está vacía");
-//                    assertEquals(request.getPlayers().get(0).getName(),response.getPlayers().get(0).getName());
+                    assertEquals("carlos",response.getPlayers().get(0).getName());
+                    assertEquals(1,response.getPlayers().get(0).getVictoryPoints());
+                    assertEquals(1,response.getPlayers().get(0).getResources());
+                    assertEquals(2,response.getPlayers().get(0).getTroops());
+                    assertEquals("Arrakis",response.getTerritoryGame().getName());
+                    assertEquals("Battle Strength",response.getTerritoryGame().getBonus());
+                    assertEquals("decrease Resources",response.getTerritoryGame().getCurse());
+                    assertEquals(2,response.getTerritoryGame().getBonusStack());
+                    assertEquals(1,response.getTerritoryGame().getCurseStack());
+                    assertEquals("FirstConflict",response.getConflictCard().getName());
+                    assertEquals(2,response.getConflictCard().getTroops());
+                    assertEquals(1,response.getConflictCard().getVictoryPoints());
+                    assertEquals(3,response.getConflictCard().getResources());
                 })
                 .verifyComplete();
     }
