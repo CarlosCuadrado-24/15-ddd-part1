@@ -17,27 +17,34 @@ public class PreparePlayerToBattleUseCase implements ICommandUseCase <PreparePla
 
     @Override
     public Mono<PreparePlayerToBattleResponse> execute(PreparePlayerToBattleRequest request) {
+        Player player = request.getPlayer();
+        player.deployAgentToBattle();
+        player.deployTroopsToBattle(request.getRound());
+        player.useLeaderHiddenAbility(request.getRound());
+        player.calculateBattleStrength(request.getRound());
 
-        return repository
-                .findEventsByAggregateId(request.getAggregateId())
-                .collectList()
-                .flatMap(events -> {
-                    Player player = Player.from(request.getAggregateId(), events);
-                    player.deployAgentToBattle();
-                    player.deployTroopsToBattle(request.getRound());
-                    player.useLeaderHiddenAbility(request.getRound());
-                    player.calculateBattleStrength(request.getRound());
-
-                    player.getUncommittedEvents().forEach(repository::save);
-                    player.markEventsAsCommitted();
+        player.getUncommittedEvents().forEach(repository::save);
+        player.markEventsAsCommitted();
 
 
-                    return Mono.just(new PreparePlayerToBattleResponse(
-                            player.getDeployedAgent().getValue(),
-                            player.getGarrison().getBattleReadyTroops().getValue(),
-                            player.getBattleStrength().getValue()
-                    ));
-                });
+        return Mono.just(new PreparePlayerToBattleResponse(
+                player.getDeployedAgent().getValue(),
+                player.getGarrison().getBattleReadyTroops().getValue(),
+                player.getBattleStrength().getValue()
+        ));
 
+//        return repository
+//                .findEventsByAggregateId(request.getAggregateId())
+//                .collectList()
+//                .flatMap(events -> {
+//                    Player player = Player.from(request.getAggregateId(), events);
+//                    player.deployAgentToBattle();
+//                    player.deployTroopsToBattle(request.getRound());
+//                    player.useLeaderHiddenAbility(request.getRound());
+//                    player.calculateBattleStrength(request.getRound());
+//
+//                    player.getUncommittedEvents().forEach(repository::save);
+//                    player.markEventsAsCommitted();
+//                });
     }
 }

@@ -1,10 +1,6 @@
-package com.dune.battleManager.application.battle.determineWinner;
-
-import static org.junit.jupiter.api.Assertions.*;
+package com.dune.battleManager.application.battle.InitializeBattle;
 
 import com.dune.battleManager.application.battle.shared.IEventsRepository;
-import com.dune.battleManager.domain.battle.events.ParticipantsConfirmed;
-import com.dune.battleManager.domain.battle.events.PlayersLoaded;
 import com.dune.battleManager.domain.player.Player;
 import com.dune.battleManager.domain.player.entities.Garrison;
 import com.dune.battleManager.domain.player.entities.Leader;
@@ -25,29 +21,26 @@ import com.dune.battleManager.domain.player.values.VictoryPoints;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
-class DetermineWinnerUseCaseTest {
+class InitializeBattleUseCaseTest {
 
-    private DetermineWinnerUseCase useCase;
+    private InitializeBattleUseCase useCase;
     private IEventsRepository repository;
-    private ArrayList<Player> players = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
         repository = Mockito.mock(IEventsRepository.class);
-        useCase = new DetermineWinnerUseCase(repository);
+        useCase = new InitializeBattleUseCase(repository);
+    }
 
-        //player 1
+    @Test
+    void executeSuccess() {
+        ArrayList<Player> players = new ArrayList<>();
         Player player = new Player();
         player.setName(Name.of("carlos"));
         player.setVictoryPoints(VictoryPoints.of(1));
@@ -77,75 +70,31 @@ class DetermineWinnerUseCaseTest {
         BattleReadyTroops battleReadyTroops = BattleReadyTroops.of(2);
         Garrison garrison = new Garrison(totalTroops, battleReadyTroops);
         player.setGarrison(garrison);
-
-        //player 2
-        Player player2= new Player();
-        player2.setName(Name.of("pablo"));
-        player2.setVictoryPoints(VictoryPoints.of(0));
-        player2.setBattleStrength(BattleStrength.of(0));
-        player2.setAlliance(Alliance.of("Emperador"));
-        player2.setDeployedAgent(DeployedAgent.of(true));
-        player2.getResources().add(Resource.of("water","water"));
-        player2.getCombatIntrigueCard().add(CombatIntrigueCard.of("Troops To Battle","troops",1));
-
-        Name leaderName2 = Name.of("Paul Atreides");
-        HiddenAbility hiddenAbility2 = HiddenAbility.of("prueba","Troops",2,"anillo");
-        Hause hause2 = Hause.of("Atreides");
-        DifficultyLevel difficultyLevel2 = DifficultyLevel.of(3);
-        PermanentAbility permanentAbility2 = PermanentAbility.of("Warlord","troops",2);
-        BlockHiddenAbility blockHiddenAbility2 = BlockHiddenAbility.of(true);
-        Leader leader2 = new Leader(
-                leaderName,
-                hiddenAbility,
-                hause,
-                difficultyLevel,
-                permanentAbility,
-                blockHiddenAbility
-        );
-        player2.setLeader(leader);
-
-        TotalTroops totalTroops2 = TotalTroops.of(5);
-        BattleReadyTroops battleReadyTroops2 = BattleReadyTroops.of(1);
-        Garrison garrison2 = new Garrison(totalTroops, battleReadyTroops);
-        player2.setGarrison(garrison);
-
-        //add a la lista
         players.add(player);
-        players.add(player2);
 
-    }
-
-    @Test
-    void determineWinnerSuccess() {
-
-        Mockito.when(repository.findEventsByAggregateId(anyString()))
-                .thenReturn(Flux.just(
-                        new PlayersLoaded(players),
-                        new ParticipantsConfirmed()
-                ));
-
-
-        DetermineWinnerRequest request = new DetermineWinnerRequest("aggregatexyz");
-
-
+        InitializeBattleRequest request = new InitializeBattleRequest("prueba",players);
         StepVerifier
                 .create(useCase.execute(request))
                 .assertNext(response -> {
                     assertNotNull(response);
-
-
-                    // Verificamos que el nombre del ganador sea el esperado
-                    assertEquals("carlos", response.getPlayerName());
-
-                    // Verificamos la recompensa del conflicto
-                    assertNotNull(response.getRewardConflict());
-                    assertEquals(1, response.getRewardConflict().getVictoryPoints());
-                    assertEquals(2, response.getRewardConflict().getTroops());
-                    assertEquals(3, response.getRewardConflict().getResources());
+                    assertEquals("carlos",response.getPlayers().get(0).getName());
+                    assertEquals(1,response.getPlayers().get(0).getVictoryPoints());
+                    assertEquals(1,response.getPlayers().get(0).getResources());
+                    assertEquals(2,response.getPlayers().get(0).getTroops());
+                    assertEquals("Arrakis",response.getTerritoryGame().getName());
+                    assertEquals("Battle Strength",response.getTerritoryGame().getBonus());
+                    assertEquals("decrease Resources",response.getTerritoryGame().getCurse());
+                    assertEquals(2,response.getTerritoryGame().getBonusStack());
+                    assertEquals(1,response.getTerritoryGame().getCurseStack());
+                    assertEquals("FirstConflict",response.getConflictCard().getName());
+                    assertEquals(2,response.getConflictCard().getTroops());
+                    assertEquals(1,response.getConflictCard().getVictoryPoints());
+                    assertEquals(3,response.getConflictCard().getResources());
                 })
                 .verifyComplete();
-
-        // 5. Validamos que el repositorio buscó los eventos
-        verify(repository).findEventsByAggregateId(anyString());
     }
+
 }
+
+
+
