@@ -23,6 +23,4 @@ public class InitializeBattleController {
     public Mono<InitializeBattleResponse> execute(@RequestBody InitializeBattleRequest request){
         return initBattleUseCase.execute(request);
     }
-
-
 }
