@@ -1,7 +1,7 @@
 package com.dune.battleManager.application.battle.determineWinner;
 
 
-import com.dune.battleManager.application.battle.shared.IEventsRepository;
+import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryPort;
 import com.dune.battleManager.domain.battle.Battle;
 import com.dune.shared.application.ICommandUseCase;
 
@@ -10,9 +10,9 @@ import reactor.core.publisher.Mono;
 
 public class DetermineWinnerUseCase implements ICommandUseCase<DetermineWinnerRequest,Mono<DetermineWinnerResponse>> {
 
-    private final IEventsRepository repository;
+    private final IEventsRepositoryPort repository;
 
-    public DetermineWinnerUseCase(IEventsRepository repository) {
+    public DetermineWinnerUseCase(IEventsRepositoryPort repository) {
         this.repository = repository;
     }
 

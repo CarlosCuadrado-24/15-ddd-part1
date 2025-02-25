@@ -13,6 +13,8 @@
             <option value="$PROJECT_DIR$/shared" />
             <option value="$PROJECT_DIR$/src/battleManager/src/application" />
             <option value="$PROJECT_DIR$/src/battleManager/src/domain" />
+            <option value="$PROJECT_DIR$/src/battleManager/src/infrastructure/driven-adapters/mongo" />
+            <option value="$PROJECT_DIR$/src/battleManager/src/infrastructure/driving-adapters/main-service" />
             <option value="$PROJECT_DIR$/src/shared/src/application" />
             <option value="$PROJECT_DIR$/src/shared/src/domain" />
           </set>

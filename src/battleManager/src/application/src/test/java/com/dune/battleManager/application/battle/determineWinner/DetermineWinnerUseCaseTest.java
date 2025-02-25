@@ -2,7 +2,7 @@ package com.dune.battleManager.application.battle.determineWinner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.dune.battleManager.application.battle.shared.IEventsRepository;
+import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryPort;
 import com.dune.battleManager.domain.battle.events.ParticipantsConfirmed;
 import com.dune.battleManager.domain.battle.events.PlayersLoaded;
 import com.dune.battleManager.domain.player.Player;
@@ -26,25 +26,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class DetermineWinnerUseCaseTest {
 
     private DetermineWinnerUseCase useCase;
-    private IEventsRepository repository;
+    private IEventsRepositoryPort repository;
     private ArrayList<Player> players = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(IEventsRepository.class);
+        repository = Mockito.mock(IEventsRepositoryPort.class);
         useCase = new DetermineWinnerUseCase(repository);
 
         //player 1

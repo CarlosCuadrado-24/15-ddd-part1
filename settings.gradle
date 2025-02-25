@@ -12,4 +12,10 @@ project(':battleManager:domain').projectDir = file('./src/battleManager/src/doma
 include ':battleManager:application'
 project(':battleManager:application').projectDir = file('./src/battleManager/src/application')
 
+include ':battleManager:mongo'
+project(':battleManager:mongo').projectDir = file('./src/battleManager/src/infrastructure/driven-adapters/mongo')
+
+include ':battleManager:main-service'
+project(':battleManager:main-service').projectDir = file('./src/battleManager/src/infrastructure/driving-adapters/main-service')
+
 

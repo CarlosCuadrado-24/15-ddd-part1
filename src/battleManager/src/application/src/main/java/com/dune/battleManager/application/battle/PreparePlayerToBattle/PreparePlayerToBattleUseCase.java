@@ -1,18 +1,16 @@
 package com.dune.battleManager.application.battle.PreparePlayerToBattle;
 
-import com.dune.battleManager.application.battle.determineWinner.DetermineWinnerResponse;
-import com.dune.battleManager.application.battle.shared.IEventsRepository;
+import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryPort;
 import com.dune.battleManager.application.battle.shared.MapperPlayer;
-import com.dune.battleManager.domain.battle.Battle;
 import com.dune.battleManager.domain.player.Player;
 import com.dune.shared.application.ICommandUseCase;
 import reactor.core.publisher.Mono;
 
 public class PreparePlayerToBattleUseCase implements ICommandUseCase <PreparePlayerToBattleRequest, Mono<PreparePlayerToBattleResponse>>{
 
-    private final IEventsRepository repository;
+    private final IEventsRepositoryPort repository;
 
-    public PreparePlayerToBattleUseCase(IEventsRepository repository) {
+    public PreparePlayerToBattleUseCase(IEventsRepositoryPort repository) {
         this.repository = repository;
     }
 

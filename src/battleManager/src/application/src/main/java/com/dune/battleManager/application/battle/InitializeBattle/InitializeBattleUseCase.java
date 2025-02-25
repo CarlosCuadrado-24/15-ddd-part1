@@ -1,9 +1,11 @@
 package com.dune.battleManager.application.battle.InitializeBattle;
 
-import com.dune.battleManager.application.battle.shared.IEventsRepository;
+import com.dune.battleManager.application.battle.shared.MapperPlayer;
+import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryPort;
 import com.dune.battleManager.domain.battle.Battle;
 import com.dune.battleManager.domain.battle.entities.ConflictCard;
 import com.dune.battleManager.domain.battle.entities.Territory;
+import com.dune.battleManager.domain.player.Player;
 import com.dune.shared.application.ICommandUseCase;
 import reactor.core.publisher.Mono;
 
@@ -12,16 +14,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattleRequest, Mono<InitializeBattleResponse>> {
-    private final IEventsRepository repository;
+    private final IEventsRepositoryPort repository;
 
-    public InitializeBattleUseCase(IEventsRepository repository) {
+    public InitializeBattleUseCase(IEventsRepositoryPort repository) {
         this.repository = repository;
     }
 
     @Override
     public Mono<InitializeBattleResponse> execute(InitializeBattleRequest request) {
         Battle battle = new Battle();
-        battle.loadPlayers(request.getPlayers());
+
+        ArrayList<Player> players = request.getPlayers()
+                .stream()
+                .map(MapperPlayer::mapper)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+
+        battle.loadPlayers(players);
         battle.confirmParticipants();
 
         List<InitializeBattleResponse.PlayerGame> playerGames = battle.getPlayers().stream()

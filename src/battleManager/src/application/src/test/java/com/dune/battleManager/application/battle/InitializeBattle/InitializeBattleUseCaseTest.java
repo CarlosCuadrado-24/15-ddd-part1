@@ -1,6 +1,6 @@
 package com.dune.battleManager.application.battle.InitializeBattle;
 
-import com.dune.battleManager.application.battle.shared.IEventsRepository;
+import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryPort;
 import com.dune.battleManager.domain.player.Player;
 import com.dune.battleManager.domain.player.entities.Garrison;
 import com.dune.battleManager.domain.player.entities.Leader;
@@ -30,11 +30,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class InitializeBattleUseCaseTest {
 
     private InitializeBattleUseCase useCase;
-    private IEventsRepository repository;
+    private IEventsRepositoryPort repository;
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(IEventsRepository.class);
+        repository = Mockito.mock(IEventsRepositoryPort.class);
         useCase = new InitializeBattleUseCase(repository);
     }
 

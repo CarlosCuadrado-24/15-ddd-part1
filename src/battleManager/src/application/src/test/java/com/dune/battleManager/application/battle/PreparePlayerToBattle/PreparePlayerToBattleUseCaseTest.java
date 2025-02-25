@@ -2,43 +2,21 @@ package com.dune.battleManager.application.battle.PreparePlayerToBattle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.dune.battleManager.application.battle.shared.IEventsRepository;
+import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryPort;
 import com.dune.battleManager.application.battle.shared.PlayerRequest;
-import com.dune.battleManager.domain.player.Player;
-import com.dune.battleManager.domain.player.entities.Garrison;
-import com.dune.battleManager.domain.player.entities.Leader;
-import com.dune.battleManager.domain.player.values.Alliance;
-import com.dune.battleManager.domain.player.values.BattleReadyTroops;
-import com.dune.battleManager.domain.player.values.BattleStrength;
-import com.dune.battleManager.domain.player.values.BlockHiddenAbility;
-import com.dune.battleManager.domain.player.values.CombatIntrigueCard;
-import com.dune.battleManager.domain.player.values.DeployedAgent;
-import com.dune.battleManager.domain.player.values.DifficultyLevel;
-import com.dune.battleManager.domain.player.values.Hause;
-import com.dune.battleManager.domain.player.values.HiddenAbility;
-import com.dune.battleManager.domain.player.values.Name;
-import com.dune.battleManager.domain.player.values.PermanentAbility;
-import com.dune.battleManager.domain.player.values.Resource;
-import com.dune.battleManager.domain.player.values.TotalTroops;
-import com.dune.battleManager.domain.player.values.VictoryPoints;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 class PreparePlayerToBattleUseCaseTest {
 
-    private IEventsRepository repository;
+    private IEventsRepositoryPort repository;
     private PreparePlayerToBattleUseCase useCase;
 
     @BeforeEach
     void setUp() {
-        repository = Mockito.mock(IEventsRepository.class);
+        repository = Mockito.mock(IEventsRepositoryPort.class);
         useCase = new PreparePlayerToBattleUseCase(repository);
     }
 
