@@ -132,12 +132,7 @@ class DetermineWinnerUseCaseTest {
                 .create(useCase.execute(request))
                 .assertNext(response -> {
                     assertNotNull(response);
-
-
-                    // Verificamos que el nombre del ganador sea el esperado
                     assertEquals("carlos", response.getPlayerName());
-
-                    // Verificamos la recompensa del conflicto
                     assertNotNull(response.getRewardConflict());
                     assertEquals(1, response.getRewardConflict().getVictoryPoints());
                     assertEquals(2, response.getRewardConflict().getTroops());
@@ -145,7 +140,7 @@ class DetermineWinnerUseCaseTest {
                 })
                 .verifyComplete();
 
-        // 5. Validamos que el repositorio buscó los eventos
+
         verify(repository).findEventsByAggregateId(anyString());
     }
 }

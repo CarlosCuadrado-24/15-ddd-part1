@@ -27,7 +27,6 @@ public class DetermineWinnerUseCase implements ICommandUseCase<DetermineWinnerRe
                     battle.applyTerritoryCurse();
                     battle.determineConflictWinner();
 
-
                     battle.getUncommittedEvents().forEach(repository::save);
                     battle.markEventsAsCommitted();
 

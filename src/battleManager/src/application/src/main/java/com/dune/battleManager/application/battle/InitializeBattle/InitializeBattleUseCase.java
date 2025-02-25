@@ -50,8 +50,6 @@ public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattl
                 conflictCard.getReward().getResources()
         );
 
-
-
         battle.getUncommittedEvents().forEach(repository::save);
         battle.markEventsAsCommitted();
 

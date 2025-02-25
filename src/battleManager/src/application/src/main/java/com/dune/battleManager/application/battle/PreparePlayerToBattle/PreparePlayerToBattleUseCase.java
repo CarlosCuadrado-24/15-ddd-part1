@@ -2,6 +2,7 @@ package com.dune.battleManager.application.battle.PreparePlayerToBattle;
 
 import com.dune.battleManager.application.battle.determineWinner.DetermineWinnerResponse;
 import com.dune.battleManager.application.battle.shared.IEventsRepository;
+import com.dune.battleManager.application.battle.shared.MapperPlayer;
 import com.dune.battleManager.domain.battle.Battle;
 import com.dune.battleManager.domain.player.Player;
 import com.dune.shared.application.ICommandUseCase;
@@ -17,7 +18,8 @@ public class PreparePlayerToBattleUseCase implements ICommandUseCase <PreparePla
 
     @Override
     public Mono<PreparePlayerToBattleResponse> execute(PreparePlayerToBattleRequest request) {
-        Player player = request.getPlayer();
+        Player player = MapperPlayer.mapper(request.getPlayer());
+
         player.deployAgentToBattle();
         player.deployTroopsToBattle(request.getRound());
         player.useLeaderHiddenAbility(request.getRound());
@@ -32,19 +34,5 @@ public class PreparePlayerToBattleUseCase implements ICommandUseCase <PreparePla
                 player.getGarrison().getBattleReadyTroops().getValue(),
                 player.getBattleStrength().getValue()
         ));
-
-//        return repository
-//                .findEventsByAggregateId(request.getAggregateId())
-//                .collectList()
-//                .flatMap(events -> {
-//                    Player player = Player.from(request.getAggregateId(), events);
-//                    player.deployAgentToBattle();
-//                    player.deployTroopsToBattle(request.getRound());
-//                    player.useLeaderHiddenAbility(request.getRound());
-//                    player.calculateBattleStrength(request.getRound());
-//
-//                    player.getUncommittedEvents().forEach(repository::save);
-//                    player.markEventsAsCommitted();
-//                });
     }
 }

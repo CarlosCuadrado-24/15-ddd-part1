@@ -3,6 +3,7 @@ package com.dune.battleManager.application.battle.PreparePlayerToBattle;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.dune.battleManager.application.battle.shared.IEventsRepository;
+import com.dune.battleManager.application.battle.shared.PlayerRequest;
 import com.dune.battleManager.domain.player.Player;
 import com.dune.battleManager.domain.player.entities.Garrison;
 import com.dune.battleManager.domain.player.entities.Leader;
@@ -44,34 +45,36 @@ class PreparePlayerToBattleUseCaseTest {
     @Test
     void testPreparePlayerToBattleSuccess() {
 
-        Player player = new Player();
-        player.setName(Name.of("carlos"));
-        player.setVictoryPoints(VictoryPoints.of(1));
-        player.setBattleStrength(BattleStrength.of(0));
-        player.setAlliance(Alliance.of("Emperador"));
-        player.setDeployedAgent(DeployedAgent.of(true));
-        player.getResources().add(Resource.of("water","water"));
-        player.getCombatIntrigueCard().add(CombatIntrigueCard.of("Troops To Battle","troops",2));
+        PlayerRequest player = new PlayerRequest();
+        player.setName("carlos");
+        player.setVictoryPoints(1);
+        player.setBattleStrength(0);
+        player.setAlliance("Emperador");
+        player.setDeployedAgent(true);
+        player.getResources().add(new PlayerRequest.ResourceRequest("water", "water"));
+        player.getCombatIntrigueCard().add(new PlayerRequest.CombatIntrigueCardRequest("Troops To Battle","troops",2));
 
-        Name leaderName = Name.of("Paul Atreides");
-        HiddenAbility hiddenAbility = HiddenAbility.of("prueba","Troops",1,"anillo");
-        Hause hause = Hause.of("Atreides");
-        DifficultyLevel difficultyLevel = DifficultyLevel.of(3);
-        PermanentAbility permanentAbility = PermanentAbility.of("Warlord","troops",1);
-        BlockHiddenAbility blockHiddenAbility = BlockHiddenAbility.of(true);
-        Leader leader = new Leader(
-                leaderName,
-                hiddenAbility,
-                hause,
-                difficultyLevel,
-                permanentAbility,
-                blockHiddenAbility
+// Crear LeaderRequest con valores primitivos
+        PlayerRequest.LeaderRequest leader = new PlayerRequest.LeaderRequest(
+                "Paul Atreides", // name
+                "prueba", // hiddenAbilityName
+                "Troops", // hiddenAbilityResource
+                1, // hiddenAbilityValue
+                "anillo", // hiddenAbilityExtra
+                "Atreides", // houseRequest
+                3, // difficultyLevel
+                "Warlord", // permanentAbilityName
+                "troops", // permanentAbilityResource
+                1, // permanentAbilityValue
+                true // blockHiddenAbility
         );
         player.setLeader(leader);
 
-        TotalTroops totalTroops = TotalTroops.of(10);
-        BattleReadyTroops battleReadyTroops = BattleReadyTroops.of(2);
-        Garrison garrison = new Garrison(totalTroops, battleReadyTroops);
+// Crear GarrisonRequest con valores primitivos
+        PlayerRequest.GarrisonRequest garrison = new PlayerRequest.GarrisonRequest(
+                10, // totalTroops
+                2 // battleReadyTroops
+        );
         player.setGarrison(garrison);
 
 
