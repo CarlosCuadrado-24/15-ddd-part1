@@ -30,8 +30,10 @@ public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattl
                 .collect(Collectors.toCollection(ArrayList::new));
 
 
-        battle.loadPlayers(players);
-        battle.confirmParticipants();
+//          battle.setPlayers(players);
+          battle.loadPlayers(players);
+          battle.confirmParticipants();
+          System.out.println(battle.getPlayers().get(0).getName().getValue());
 
         List<InitializeBattleResponse.PlayerGame> playerGames = battle.getPlayers().stream()
                 .map(player -> new InitializeBattleResponse.PlayerGame(
@@ -65,7 +67,8 @@ public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattl
         return Mono.just(new InitializeBattleResponse(
                 new ArrayList<>(playerGames),
                 conflictCardGame,
-                territoryGame
+                territoryGame,
+                battle.getIdentity().getValue()
         ));
     }
 }

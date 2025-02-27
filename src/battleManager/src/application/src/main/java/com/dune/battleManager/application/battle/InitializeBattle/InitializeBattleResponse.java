@@ -6,11 +6,13 @@ public class InitializeBattleResponse {
     private final ArrayList<PlayerGame> players;
     private final ConflictCardGame conflictCard;
     private final TerritoryGame territoryGame;
+    private final String id;
 
-    public InitializeBattleResponse(ArrayList<PlayerGame> players, ConflictCardGame conflictCards, TerritoryGame territoryGame) {
+    public InitializeBattleResponse(ArrayList<PlayerGame> players, ConflictCardGame conflictCards, TerritoryGame territoryGame, String id) {
         this.players = players;
         this.conflictCard = conflictCards;
         this.territoryGame = territoryGame;
+        this.id = id;
     }
 
 
@@ -24,6 +26,10 @@ public class InitializeBattleResponse {
 
     public TerritoryGame getTerritoryGame() {
         return territoryGame;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public static class PlayerGame{

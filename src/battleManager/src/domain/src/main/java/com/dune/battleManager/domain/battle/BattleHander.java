@@ -113,6 +113,7 @@ public class BattleHander extends DomainActionsContainer {
     public Consumer<? extends DomainEvent> loadPlayers(Battle battle){
         return (PlayersLoaded event) ->{
             battle.setPlayers(event.getPlayers());
+            System.out.println(battle.getPlayers().get(0).getName().getValue());
         };
     }
 

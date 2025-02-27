@@ -5,7 +5,11 @@ import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryP
 import com.dune.battleManager.domain.battle.Battle;
 import com.dune.shared.application.ICommandUseCase;
 
+import com.dune.shared.domain.generic.DomainEvent;
 import reactor.core.publisher.Mono;
+
+import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 
 
 public class DetermineWinnerUseCase implements ICommandUseCase<DetermineWinnerRequest,Mono<DetermineWinnerResponse>> {
@@ -23,9 +27,20 @@ public class DetermineWinnerUseCase implements ICommandUseCase<DetermineWinnerRe
                 .collectList()
                 .flatMap(events -> {
                     Battle battle = Battle.from(request.getAggregateId(), events);
+                    events.sort(Comparator.comparing(DomainEvent::getWhen));
                     battle.applyTerritoryBonus();
                     battle.applyTerritoryCurse();
+                    System.out.println(battle.getPlayers().get(0).getName().getValue());
                     battle.determineConflictWinner();
+//                    try {
+////                        System.out.println("Esperando...");
+//                        TimeUnit.SECONDS.sleep(1);
+//                        battle.determineConflictWinner();
+////                        System.out.println("Listo!");
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+
 
                     battle.getUncommittedEvents().forEach(repository::save);
                     battle.markEventsAsCommitted();

@@ -28,6 +28,7 @@ public class PreparePlayerToBattleUseCase implements ICommandUseCase <PreparePla
 
 
         return Mono.just(new PreparePlayerToBattleResponse(
+                player.getName().getValue(),
                 player.getDeployedAgent().getValue(),
                 player.getGarrison().getBattleReadyTroops().getValue(),
                 player.getBattleStrength().getValue()
