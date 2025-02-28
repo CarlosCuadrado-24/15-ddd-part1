@@ -4,14 +4,23 @@ import com.dune.shared.domain.generic.DomainEvent;
 
 public class BattleStrengthCalculated extends DomainEvent {
 
-    private final Integer Round;
+    private Integer round;
 
     public BattleStrengthCalculated(Integer round) {
         super(EventsEnum.BATTLE_STRENGTH_CALCULATED.name());
-        Round = round;
+        round = round;
+    }
+
+    public BattleStrengthCalculated() {
+        super(EventsEnum.BATTLE_STRENGTH_CALCULATED.name());
+        round = 0;
     }
 
     public Integer getRound() {
-        return Round;
+        return round;
+    }
+
+    public void setRound(Integer round) {
+        this.round = round;
     }
 }

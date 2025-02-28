@@ -7,7 +7,7 @@ import com.dune.shared.application.Request;
 import java.util.ArrayList;
 
 public class InitializeBattleRequest extends Request {
-    private final ArrayList<PlayerRequest> players;
+    private ArrayList<PlayerRequest> players;
 
     public InitializeBattleRequest(String aggregateId, ArrayList<PlayerRequest> players) {
         super(aggregateId);
@@ -16,5 +16,9 @@ public class InitializeBattleRequest extends Request {
 
     public ArrayList<PlayerRequest> getPlayers() {
         return players;
+    }
+
+    public void setPlayers(ArrayList<PlayerRequest> players) {
+        this.players = players;
     }
 }

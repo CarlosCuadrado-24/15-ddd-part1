@@ -10,6 +10,7 @@ import com.dune.battleManager.domain.battle.events.ParticipantsConfirmed;
 import com.dune.battleManager.domain.battle.events.PlayersLoaded;
 import com.dune.battleManager.domain.battle.events.TerritoryBonusApplied;
 import com.dune.battleManager.domain.battle.events.TerritoryCurseApplied;
+import com.dune.battleManager.domain.battle.utils.PlayerData;
 import com.dune.battleManager.domain.battle.values.BattleId;
 import com.dune.battleManager.domain.battle.values.Round;
 import com.dune.battleManager.domain.battle.values.Rule;
@@ -103,6 +104,7 @@ public class Battle extends AggregateRoot<BattleId> {
         this.winner = winner;
     }
 
+
     public void determineConflictWinner(){
         apply(new ConflictWinnerDetermined());
     }
@@ -123,9 +125,14 @@ public class Battle extends AggregateRoot<BattleId> {
         apply(new TerritoryCurseApplied());
     }
 
-    public void loadPlayers(ArrayList<Player> players){
+    public void loadPlayers(ArrayList<PlayerData> players){
         apply(new PlayersLoaded(players));
+//        System.out.println("XDDDDDDDDDDDDDDDD");
     }
+
+//    public void loadPlayers(Player player){
+//        apply(new PlayersLoaded(player));
+//    }
 
 //    public void initGame(){
 //        apply(new InitializedDateBattle());
@@ -137,7 +144,6 @@ public class Battle extends AggregateRoot<BattleId> {
         events.forEach(battle::apply);
         return battle;
     }
-
 
 
 }

@@ -6,4 +6,7 @@ dependencies {
     implementation(project(':shared:application'))
 }
 
+//tasks.withType(JavaExec).configureEach {
+//    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+//}
 

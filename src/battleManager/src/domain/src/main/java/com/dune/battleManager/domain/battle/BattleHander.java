@@ -10,6 +10,7 @@ import com.dune.battleManager.domain.battle.events.ParticipantsConfirmed;
 import com.dune.battleManager.domain.battle.events.PlayersLoaded;
 import com.dune.battleManager.domain.battle.events.TerritoryBonusApplied;
 import com.dune.battleManager.domain.battle.events.TerritoryCurseApplied;
+import com.dune.battleManager.domain.battle.utils.MapperPlayerData;
 import com.dune.battleManager.domain.battle.values.Banner;
 import com.dune.battleManager.domain.battle.values.Bonus;
 import com.dune.battleManager.domain.battle.values.Curse;
@@ -26,6 +27,7 @@ import com.dune.shared.domain.generic.DomainEvent;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class BattleHander extends DomainActionsContainer {
 
@@ -112,8 +114,11 @@ public class BattleHander extends DomainActionsContainer {
 
     public Consumer<? extends DomainEvent> loadPlayers(Battle battle){
         return (PlayersLoaded event) ->{
-            battle.setPlayers(event.getPlayers());
-            System.out.println(battle.getPlayers().get(0).getName().getValue());
+            ArrayList<Player> players = event.getPlayers()
+                    .stream()
+                    .map(MapperPlayerData::mapper)
+                    .collect(Collectors.toCollection(ArrayList::new));
+            battle.setPlayers(players);
         };
     }
 

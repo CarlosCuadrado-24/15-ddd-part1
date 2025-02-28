@@ -110,6 +110,15 @@ public class Player extends AggregateRoot<PlayerId> {
     public void setGarrison(Garrison garrison) {
         this.garrison = garrison;
     }
+
+    public void setResources(ArrayList<Resource> resources) {
+        this.resources = resources;
+    }
+
+    public void setCombatIntrigueCard(ArrayList<CombatIntrigueCard> combatIntrigueCard) {
+        this.combatIntrigueCard = combatIntrigueCard;
+    }
+
     //endregion
 
     //region eventos de dominio

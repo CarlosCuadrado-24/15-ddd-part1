@@ -1,10 +1,24 @@
 package com.dune.battleManager.application.battle.InitializeBattle;
 
+//import com.dune.battleManager.application.battle.shared.MapperPlayer;
+//import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryPort;
+//import com.dune.battleManager.domain.battle.Battle;
+//import com.dune.battleManager.domain.battle.entities.ConflictCard;
+//import com.dune.battleManager.domain.battle.entities.Territory;
+//import com.dune.battleManager.domain.player.Player;
+//import com.dune.shared.application.ICommandUseCase;
+//import reactor.core.publisher.Mono;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.stream.Collectors;
+
 import com.dune.battleManager.application.battle.shared.MapperPlayer;
 import com.dune.battleManager.application.battle.shared.ports.IEventsRepositoryPort;
 import com.dune.battleManager.domain.battle.Battle;
 import com.dune.battleManager.domain.battle.entities.ConflictCard;
 import com.dune.battleManager.domain.battle.entities.Territory;
+import com.dune.battleManager.domain.battle.utils.PlayerData;
 import com.dune.battleManager.domain.player.Player;
 import com.dune.shared.application.ICommandUseCase;
 import reactor.core.publisher.Mono;
@@ -30,8 +44,53 @@ public class InitializeBattleUseCase  implements ICommandUseCase<InitializeBattl
                 .collect(Collectors.toCollection(ArrayList::new));
 
 
-//          battle.setPlayers(players);
-          battle.loadPlayers(players);
+        ArrayList<PlayerData> playerDataList = request.getPlayers()
+                .stream()
+                .map(playerRequest -> new PlayerData(
+                        playerRequest.getName(),
+                        playerRequest.getVictoryPoints(),
+                        playerRequest.getDeployedAgent(),
+                        playerRequest.getAlliance(),
+                        playerRequest.getBattleStrength(),
+                        playerRequest.getResources() != null
+                                ? playerRequest.getResources().stream()
+                                .map(resource -> new PlayerData.ResourceRequest(resource.getType(), resource.getDescription()))
+                                .collect(Collectors.toCollection(ArrayList::new))
+                                : new ArrayList<>(),
+                        playerRequest.getCombatIntrigueCard() != null
+                                ? playerRequest.getCombatIntrigueCard().stream()
+                                .map(card -> new PlayerData.CombatIntrigueCardRequest(card.getName(), card.getEffect(), card.getStack()))
+                                .collect(Collectors.toCollection(ArrayList::new))
+                                : new ArrayList<>(),
+                        playerRequest.getLeader() != null
+                                ? new PlayerData.LeaderRequest(
+                                playerRequest.getLeader().getName(),
+                                playerRequest.getLeader().getHiddenAbilityName(),
+                                playerRequest.getLeader().getHiddenAbilityResource(),
+                                playerRequest.getLeader().getHiddenAbilityValue(),
+                                playerRequest.getLeader().getHiddenAbilityExtra(),
+                                playerRequest.getLeader().getHouseRequest(),
+                                playerRequest.getLeader().getDifficultyLevel(),
+                                playerRequest.getLeader().getPermanentAbilityName(),
+                                playerRequest.getLeader().getPermanentAbilityResource(),
+                                playerRequest.getLeader().getPermanentAbilityValue(),
+                                playerRequest.getLeader().getBlockHiddenAbility()
+                        )
+                                : null,  // Si es null en PlayerRequest, que siga siendo null en PlayerData.
+                        playerRequest.getGarrison() != null
+                                ? new PlayerData.GarrisonRequest(
+                                playerRequest.getGarrison().getTotalTroops(),
+                                playerRequest.getGarrison().getBattleReadyTroops()
+                        )
+                                : null  // Lo mismo con Garrison.
+                ))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+
+
+        battle.setPlayers(players);
+//        Player player1 = players.get(0);
+          battle.loadPlayers(playerDataList);
           battle.confirmParticipants();
           System.out.println(battle.getPlayers().get(0).getName().getValue());
 

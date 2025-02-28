@@ -30,7 +30,7 @@ public class DetermineWinnerUseCase implements ICommandUseCase<DetermineWinnerRe
                     events.sort(Comparator.comparing(DomainEvent::getWhen));
                     battle.applyTerritoryBonus();
                     battle.applyTerritoryCurse();
-                    System.out.println(battle.getPlayers().get(0).getName().getValue());
+//                    System.out.println(battle.getPlayers().get(0).getName().getValue());
                     battle.determineConflictWinner();
 //                    try {
 ////                        System.out.println("Esperando...");
